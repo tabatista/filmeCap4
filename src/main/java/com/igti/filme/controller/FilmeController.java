@@ -49,11 +49,11 @@ public class FilmeController {
 		if(!filmeOptional.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} 		
-		////acessa pela URL http://localhost:8080/filmes/id
+		//acessa pela URL http://localhost:8080/filmes/id
 		return new ResponseEntity<>(filmeOptional.get(), HttpStatus.OK);		
 	}
 	
-	@RequestMapping(path = "{id}", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	//pega as informacoes do corpo da requisicao com o @RequestBody - o corpo do request sera mapeado no parametro
 	//com o @Valid os dados do request serão validados.
 	public ResponseEntity<Void> criar(@RequestBody @Valid FilmeRequest request){
@@ -65,7 +65,30 @@ public class FilmeController {
 		
 		filmeRepository.save(filme);
 		
+		//acessa pela URL http://localhost:8080/filmes/ (COM O BODY PREENCHIDO - POSTMAN)
 		//status 201
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(path = "{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> alterar(@PathVariable String id, @RequestBody @Valid FilmeRequest request){
+		
+		Optional<Filme> filmeOptional = filmeRepository.findById(id);
+		
+		//verifica se o filme NAO existe
+		if(!filmeOptional.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} 
+		
+		filmeOptional.get().setTitulo(request.getTitulo());
+		filmeOptional.get().setDiretor(request.getDiretor());
+		filmeOptional.get().setGenero(request.getGenero());
+		filmeOptional.get().setAno(request.getAno());
+		
+		filmeRepository.save(filmeOptional.get());
+		
+		//acessa pela URL http://localhost:8080/filmes/id (COM O BODY PREENCHIDO - POSTMAN)
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }

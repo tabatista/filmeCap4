@@ -1,10 +1,14 @@
 package com.igti.filme.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Data;
 
 //lombok para nao implementar get e set
 @Data
-public class Filme {
+//declara a entidade como um documento - para usar com o mongo (Collection filme)
+@Document
+public class Filme { //resource filme
 	private String id;
 	private String titulo;
 	private String diretor;

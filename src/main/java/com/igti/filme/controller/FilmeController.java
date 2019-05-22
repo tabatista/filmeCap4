@@ -128,4 +128,20 @@ public class FilmeController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping(path = "{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> excluir(@PathVariable String id) {
+
+		Optional<Filme> filmeOptional = filmeRepository.findById(id);
+
+		// verifica se o filme NAO existe
+		if (!filmeOptional.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		filmeRepository.delete((filmeOptional.get()));
+
+		// acessa pela URL http://localhost:8080/filmes/id
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
